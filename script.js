@@ -3,6 +3,21 @@ let string = '';
 let playerItem = '';
 let computerItem = '';
 let k = 0;
+let m=0;
+const res = document.querySelector("#newtext");
+let scoreRight= document.querySelector(".box:last-child");
+let scoreLeft = document.querySelector(".box:first-child");
+let selectors = document.getElementsByClassName("selector");
+let retry = document.querySelector(".retry");
+console.log(retry);
+
+retry.addEventListener("click",reloadScore,false);
+
+for (i = 0; i < selectors.length; i++) {
+    selectors[i].addEventListener("click", playRound,false);
+    }
+
+
 function selectItem(){
     let intrnd = Math.floor(Math.random()*100);
     let indx = intrnd % 3;
@@ -10,42 +25,67 @@ function selectItem(){
     return result;
 }
 
+function playgame(a){
 
-function playerSelection(){
-    let selector = prompt("Choose your weapon! /n You will fight with a rock , a paper or a scissor?");
-    let trueSelector = selector.toLowerCase() ;
-    return trueSelector;
-}
-
-
-function game(){
-playerItem = playerSelection();
-computerItem = selectItem();
-if((playerItem != item[0]) && (playerItem != item[1]) && (playerItem != item[2])){
-    console.log("Choose one of the presented weapon ,you funny guy!");
-}else{
+    playerItem = a;
+    computerItem = selectItem();
+    res.innerHTML = "";
+    // finalGame(m,k);
     if(computerItem == playerItem){
-        console.log("It's draw!");
-        string = `The enemy has choosen ${computerItem} too.\nI would take it as a draw but it depends on your power .`;
-        console.log(string);
-        if(i != 0) i--;
+        res.append(`Draw...`);
     }else if(((computerItem == "paper") && (playerItem == "scissor")||
              ((computerItem == "rock") && (playerItem == "paper"))||
              ((computerItem == "paper") && (playerItem == "rock")))){
-        console.log(`You win! \nWith your ${[playerItem]} the enemy will not have a chance with a little ${computerItem}.`);
+                res.append(`You win this one! .`);
+                k++;
     }else{
-        console.log(`You lose! \nWith your ${[playerItem]} the enemy will masacrate you with a little ${computerItem}.`);
-        k++;
+        res.append(`You lose this one! .`);
+        m++;
+    }
+    scoreLeft.innerHTML="";
+    scoreRight.innerHTML="";
+    scoreLeft.append(k);
+    scoreRight.append(m);
+    finalGame(m.k);
+}
+
+function playRound(e){
+    let value = '';
+    if(this.classList.contains('rock')){
+        value='rock';
+    }
+    if(this.classList.contains('paper')){
+        value='paper';
+    }
+    if(this.classList.contains('scissor')){
+        value='scissor';
+    }
+    playgame(value);
+}
+
+function finalGame(a,b){
+a=m;b=k;
+if(a>2){
+    console.log("aici");
+    res.innerHTML = "You lose!";
+    for (i = 0; i < selectors.length; i++) {
+    selectors[i].removeEventListener("click", playRound,false);
+    }
+}else if(b>2){
+    res.innerHTML = "You win!";
+    for (i = 0; i < selectors.length; i++) {
+    selectors[i].removeEventListener("click", playRound,false);
     }
 }
 }
 
-for(i=0;i<5;i++){
-    game();
+function reloadScore(e){
+    res.innerHTML="";
+    m=0;scoreRight.innerHTML="0";
+    k=0;scoreLeft.innerHTML="0";
+    for (i = 0; i < selectors.length; i++) {
+        selectors[i].addEventListener("click", playRound,false);
+        }
 }
 
-if(k<3){
-    console.log('YOU WIN!!! The score was ' + (5-k) + ' - ' + k + ' for you.');
-}else{
-    console.log('YOU LOSE!!! The score was '+ k +' - ' + (5-k) +' for the enemy.');
-}
+
